@@ -1,81 +1,105 @@
+import { Card } from "@/components/ui/card";
 import Image from "next/image";
-import { Github, Twitter } from "lucide-react";
+import { Github, MapPin, Clock } from "lucide-react";
+import { formatRelativeTime } from "@/lib/utils";
+
+// This would typically come from your data source
+const feedItems = [
+	{
+		type: "photo",
+		image: "/placeholder.svg?height=400&width=600",
+		location: "Tokyo, Japan",
+		caption: "Cherry blossoms in full bloom at Ueno Park",
+		date: "2024-02-24T15:30:00Z",
+	},
+	{
+		type: "github",
+		repo: "vercel/next.js",
+		prNumber: "12345",
+		title: "Add new feature for API routes",
+		date: "2024-02-23T09:15:00Z",
+	},
+	{
+		type: "text",
+		content:
+			"Just deployed a new feature to production. Excited to share more soon!",
+		date: "2024-02-22T18:45:00Z",
+	},
+];
 
 export default function Page() {
 	return (
-		<div className="min-h-screen bg-background flex items-center justify-center p-4">
-			<div className="max-w-2xl w-full space-y-6 text-center">
-				<div className="relative w-64 h-64 mx-auto rounded-2xl overflow-hidden">
-					<Image
-						src="/gargs.png"
-						alt="Profile image with Japanese oni mask"
-						fill
-						className="object-cover"
-						priority
-					/>
-				</div>
-				<div className="space-y-2">
-					<h1 className="text-3xl font-bold tracking-tight">gargs.eth</h1>
-					<p className="text-muted-foreground">
-						Building{" "}
-						<a
-							href="https://twitter.com/blossomland_"
-							className="text-primary hover:underline"
-							target="_blank"
-							rel="noopener noreferrer"
-						>
-							@blossomland_
-						</a>{" "}
-						and @archpass
-					</p>
-				</div>
-				<div className="flex justify-center space-x-4">
-					<a
-						href="https://github.com/garguelles"
-						target="_blank"
-						rel="noopener noreferrer"
-						className="text-muted-foreground hover:text-foreground transition-colors"
-					>
-						<Github className="w-6 h-6" />
-						<span className="sr-only">GitHub</span>
-					</a>
-					<a
-						href="https://warpcast.com/gargs.eth"
-						target="_blank"
-						rel="noopener noreferrer"
-						className="text-muted-foreground hover:text-foreground transition-colors"
-					>
-						<svg
-							width="24"
-							height="24"
-							viewBox="0 0 1260 1260"
-							xmlns="http://www.w3.org/2000/svg"
-						>
-							<g clipPath="url(#clip0_1_2)">
-								<path d="M947.747 1259.61H311.861C139.901 1259.61 0 1119.72 0 947.752V311.871C0 139.907 139.901 0.00541362 311.861 0.00541362H947.747C1119.71 0.00541362 1259.61 139.907 1259.61 311.871V947.752C1259.61 1119.72 1119.71 1259.61 947.747 1259.61Z" />
-								<path
-									d="M826.513 398.633L764.404 631.889L702.093 398.633H558.697L495.789 633.607L433.087 398.633H269.764L421.528 914.36H562.431L629.807 674.876L697.181 914.36H838.388L989.819 398.633H826.513Z"
-									fill="white"
-								/>
-							</g>
-							<defs>
-								<clipPath id="clip0_1_2">
-									<rect width="1259.61" height="1259.61" fill="white" />
-								</clipPath>
-							</defs>
-						</svg>
-						<span className="sr-only">Farcaster</span>
-					</a>
-					<a
-						href="https://twitter.com/grd_arguelles"
-						target="_blank"
-						rel="noopener noreferrer"
-						className="text-muted-foreground hover:text-foreground transition-colors"
-					>
-						<Twitter className="w-6 h-6" />
-						<span className="sr-only">X (Twitter)</span>
-					</a>
-				</div>
+		<div className="max-w-2xl mx-auto py-8 px-4">
+			<div className="space-y-6">
+				{feedItems.map((item, index) => {
+					if (item.type === "photo") {
+						return (
+							<Card key={index} className="overflow-hidden">
+								<div className="relative aspect-[4/3]">
+									<Image
+										src={item.image || "/placeholder.svg"}
+										alt={item.caption || ""}
+										fill
+										className="object-cover"
+									/>
+								</div>
+								<div className="p-4 space-y-3">
+									{item.location && (
+										<div className="flex items-center text-sm text-muted-foreground">
+											<MapPin className="w-4 h-4 mr-1" />
+											{item.location}
+										</div>
+									)}
+									{item.caption && <p className="text-sm">{item.caption}</p>}
+									<div className="flex items-center text-sm text-muted-foreground">
+										<Clock className="w-4 h-4 mr-1" />
+										{formatRelativeTime(item.date)}
+									</div>
+								</div>
+							</Card>
+						);
+					}
+
+					if (item.type === "github") {
+						return (
+							<Card key={index} className="p-4 space-y-3">
+								<div className="flex items-start space-x-3">
+									<Github className="w-5 h-5 mt-1 text-muted-foreground" />
+									<div className="space-y-1">
+										<p className="text-sm">
+											Merged PR #{item.prNumber} in{" "}
+											<a
+												href={`https://github.com/${item.repo}`}
+												className="font-medium hover:underline"
+											>
+												{item.repo}
+											</a>
+										</p>
+										<p className="text-sm text-muted-foreground">
+											{item.title}
+										</p>
+									</div>
+								</div>
+								<div className="flex items-center text-sm text-muted-foreground">
+									<Clock className="w-4 h-4 mr-1" />
+									{formatRelativeTime(item.date)}
+								</div>
+							</Card>
+						);
+					}
+
+					if (item.type === "text") {
+						return (
+							<Card key={index} className="p-4 space-y-3">
+								<p className="text-sm">{item.content}</p>
+								<div className="flex items-center text-sm text-muted-foreground">
+									<Clock className="w-4 h-4 mr-1" />
+									{formatRelativeTime(item.date)}
+								</div>
+							</Card>
+						);
+					}
+				})}
 			</div>
 		</div>
 	);
