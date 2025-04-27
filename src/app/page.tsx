@@ -25,8 +25,16 @@ export default function Page() {
 							rel="noopener noreferrer"
 						>
 							@blossomland_
-						</a>{" "}
-						and @archpass
+						</a>
+						&nbsp; and &nbsp;
+						<a
+							href="https://x.com/cellfi_eth"
+							className="text-primary hover:underline"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							@cellfi_xyz
+						</a>
 					</p>
 				</div>
 				<div className="flex justify-center space-x-4">
