@@ -28,7 +28,7 @@ export default function Page() {
 						</a>
 						&nbsp; and &nbsp;
 						<a
-							href="https://x.com/cellfi_eth"
+							href="https://x.com/cellfi_xyz"
 							className="text-primary hover:underline"
 							target="_blank"
 							rel="noopener noreferrer"
